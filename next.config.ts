@@ -1,8 +1,22 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Compression и minification
+  compress: true,
+  swcMinify: true,
+  
+  // Оптимизация production build
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  
+  // Оптимизация изображений
   images: {
     domains: ['localhost', '127.0.0.1'],
+    formats: ['image/webp', 'image/avif'],
+    minimumCacheTTL: 31536000, // 1 год
+    deviceSizes: [640, 750, 828, 1080, 1200],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     remotePatterns: [
       {
         protocol: 'https',
@@ -38,15 +52,13 @@ const nextConfig: NextConfig = {
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-    unoptimized: true,
   },
+  
   eslint: {
-    // Netlify не устанавливает devDependencies по умолчанию в production builds,
-    // поэтому отключаем автоматический запуск ESLint во время сборки.
     ignoreDuringBuilds: true,
   },
+  
   typescript: {
-    // Игнорируем ошибки TypeScript во время сборки
     ignoreBuildErrors: true,
   },
 };

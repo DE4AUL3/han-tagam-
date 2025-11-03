@@ -11,6 +11,7 @@ import { useCart } from '@/hooks/useCart'
 import { Category } from '@/types/menu'
 import { imageService } from '@/lib/imageService'
 import FloatingCallButton from '@/components/FloatingCallButton'
+import FloatingRestaurantButton from '@/components/FloatingRestaurantButton'
 import { getAppThemeColors, getAppThemeClasses } from '@/styles/appTheme'
 import { getImageUrl } from "@/lib/imageUtils"
 
@@ -28,9 +29,36 @@ export default function MenuPage() {
     // Загружаем категории из API
     const loadCategories = async () => {
       try {
+        // Проверяем кэш в sessionStorage
+        const cachedData = sessionStorage.getItem('categories')
+        const cacheTime = sessionStorage.getItem('categories_time')
+        const now = Date.now()
+        
+        // Если кэш свежий (< 5 минут), используем его
+        if (cachedData && cacheTime && (now - parseInt(cacheTime) < 5 * 60 * 1000)) {
+          const data = JSON.parse(cachedData)
+          const transformedCategories = data.map((cat: any) => ({
+            id: cat.id,
+            name: cat.nameRu,
+            nameTk: cat.nameTk,
+            image: cat.imageCard,
+            gradient: 'from-slate-500 to-slate-700',
+            description: cat.descriptionRu || '',
+            descriptionTk: cat.descriptionTk || '',
+            isActive: cat.status,
+            sortOrder: cat.order
+          }))
+          setCategories(transformedCategories)
+          return
+        }
+        
         const response = await fetch('/api/category')
         if (response.ok) {
           const data = await response.json()
+          
+          // Сохраняем в кэш
+          sessionStorage.setItem('categories', JSON.stringify(data))
+          sessionStorage.setItem('categories_time', now.toString())
           // Трансформируем данные из БД в формат Category
           const transformedCategories = data.map((cat: any) => ({
             id: cat.id,
@@ -100,7 +128,10 @@ export default function MenuPage() {
                     alt="Han Tagam"
                     fill
                     className="object-contain"
-                  />
+                  
+                          loading="lazy"
+                          quality={75}
+                          />
                 </div>
                 <div>
                   <h1 className={`text-xl sm:text-2xl font-bold ${themeClasses.text}`}> 
@@ -164,7 +195,10 @@ export default function MenuPage() {
                       fill
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                       priority
-                    />
+                    
+                          loading="lazy"
+                          quality={75}
+                          />
                   ) : null}
                   
                   {/* Gradient overlay */}
@@ -180,7 +214,10 @@ export default function MenuPage() {
                           width={200}
                           height={200}
                           className="w-full h-full sm:w-full sm:h-full object-cover"
-                        />
+                        
+                          loading="lazy"
+                          quality={75}
+                          />
                       ) : null}
                     </div>
                   </div>
@@ -197,19 +234,12 @@ export default function MenuPage() {
           </div>
         </div>
 
-        {/* Back to Restaurant Selection Button */}
-        <div className="mt-8 flex justify-center">
-          <button
-            onClick={() => router.push('/select-restaurant')}
-            className="px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 bg-gradient-to-r from-emerald-600 to-emerald-800 hover:from-emerald-500 hover:to-emerald-700 text-white shadow-lg"
-          >
-            ← {currentLanguage === 'tk' ? 'Restoran saýlamak' : 'Выбрать другой ресторан'}
-          </button>
-        </div>
       </main>
 
       {/* Floating Phone Button */}
       <FloatingCallButton />
+      <FloatingRestaurantButton />
+      <FloatingRestaurantButton />
     </motion.div>
   )
 }
