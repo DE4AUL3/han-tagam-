@@ -11,8 +11,8 @@ import { useCart } from '@/hooks/useCart'
 import { Category } from '@/types/menu'
 import { imageService } from '@/lib/imageService'
 import FloatingCallButton from '@/components/FloatingCallButton'
-import { getImageUrl } from "@/lib/imageUtils"
 import { getAppThemeColors, getAppThemeClasses } from '@/styles/appTheme'
+import { getImageUrl } from "@/lib/imageUtils"
 
 export default function MenuPage() {
   const router = useRouter()
@@ -21,10 +21,10 @@ export default function MenuPage() {
   const { state: cartState } = useCart()
   const [categories, setCategories] = useState<Category[]>([])
 
-  useEffect(() => {
-    // Устанавливаем тему для Panda Burger
-    setRestaurant('han-tagam')
 
+  useEffect(() => {
+    // Устанавливаем тему для Han Tagam
+    setRestaurant('han-tagam')
     // Загружаем категории из API
     const loadCategories = async () => {
       try {
@@ -51,14 +51,23 @@ export default function MenuPage() {
     }
 
     loadCategories()
-  }, [setRestaurant])
+  }, [])
 
-  // Используем panda-dark тему
+  // Используем gold-elegance тему
   const themeColors = getAppThemeColors('gold-elegance');
   const themeClasses = getAppThemeClasses('gold-elegance');
 
-  // Устанавливаем имя ресторана для Panda Burger
-  const restaurantDisplayName = 'Han Tagam';
+  // Вычисляем отображаемое имя ресторана по сегменту URL (поддерживаем числовые legacy id)
+  let restaurantDisplayName = 'Han Tagam';
+  if (typeof window !== 'undefined') {
+    const pathId = window.location.pathname.split('/')[2] || '';
+    if (pathId === 'panda-burger' || pathId === '2') restaurantDisplayName = 'Panda Burger';
+    if (pathId === 'han-tagam' || pathId === '1') restaurantDisplayName = 'Han Tagam';
+    // fallback to theme/currentRestaurant
+    if (!pathId) restaurantDisplayName = currentRestaurant === 'panda-burger' ? 'Panda Burger' : 'Han Tagam';
+  } else {
+    restaurantDisplayName = currentRestaurant === 'panda-burger' ? 'Panda Burger' : 'Han Tagam';
+  }
   const pageVariants: any = {
     hidden: { opacity: 0, y: 12 },
     enter: { opacity: 1, y: 0, transition: { duration: 0.28, ease: [0.2, 0.8, 0.2, 1] } },
@@ -87,7 +96,7 @@ export default function MenuPage() {
               <div className="flex items-center space-x-3">
                 <div className="relative w-10 h-10 sm:w-12 sm:h-12">
                   <Image
-                    src="/khan-tagam-logo.svg"
+                    src="/images/han-tagam-logo.png"
                     alt="Han Tagam"
                     fill
                     className="object-contain"
@@ -110,17 +119,18 @@ export default function MenuPage() {
                 style={{ boxShadow: 'none' }}
                 aria-label="Сменить язык"
               >
-                <Globe className="w-6 h-6 text-gray-700" />
+                <Globe className="w-6 h-6" style={{ color: '#d4af37' }} />
               </button>
 
               {/* Cart */}
               <button
                 onClick={() => router.push('/cart')}
-                className="relative p-2 rounded-xl transition-colors duration-200 bg-emerald-500 hover:bg-emerald-600 text-gray-700"
+                className={`relative p-2 rounded-xl transition-colors duration-200 ${themeClasses.accent}`}
+                style={{ color: '#fff', background: 'linear-gradient(90deg, #d4af37 0%, #b8860b 100%)' }}
               >
                 <ShoppingCart className="w-5 h-5" />
                 {cartState.items.length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 bg-[#d4af37] text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                     {cartState.items.reduce((sum, item) => sum + item.quantity, 0)}
                   </span>
                 )}
@@ -140,29 +150,31 @@ export default function MenuPage() {
                 key={category.id}
                 role="button"
                 tabIndex={0}
-                onClick={() => router.push(`/menu/category/${category.id}?restaurantId=han-tagam`)}
-                onKeyDown={(e) => { if (e.key === 'Enter') router.push(`/menu/category/${category.id}?restaurantId=han-tagam`) }}
+                onClick={() => router.push(`/menu/${currentRestaurant}/category/${category.id}`)}
+                onKeyDown={(e) => { if (e.key === 'Enter') router.push(`/menu/${currentRestaurant}/category/${category.id}`) }}
                 onPointerEnter={() => {
                   try {
                     // prefetch route
-                    (router as any).prefetch && (router as any).prefetch(`/menu/category/${category.id}?restaurantId=han-tagam`)
+                    (router as any).prefetch && (router as any).prefetch(`/menu/${currentRestaurant}/category/${category.id}`)
                     // warm up meals API once and cache in window and sessionStorage
                     if (typeof window !== 'undefined') {
                       (window as any).__mealCache = (window as any).__mealCache || {}
                       if (!(window as any).__mealCache[category.id]) {
                         fetch(`/api/meal?categoryId=${category.id}`)
-                          .then(r => r.json())
-                          .then(meals => {
-                            (window as any).__mealCache[category.id] = meals
-                            sessionStorage.setItem('mealCache:' + category.id, JSON.stringify(meals))
-                          })
+                          .then(r => r.ok ? r.json() : null)
+                          .then(data => {
+                            if (data) {
+                              (window as any).__mealCache[category.id] = data
+                              try { sessionStorage.setItem('mealCache:' + category.id, JSON.stringify(data)) } catch (e) {}
+                            }
+                          }).catch(() => {})
                       }
                     }
                   } catch (e) {}
                 }}
                 onFocus={() => {
                   try {
-                    (router as any).prefetch && (router as any).prefetch(`/menu/category/${category.id}?restaurantId=han-tagam`)
+                    (router as any).prefetch && (router as any).prefetch(`/menu/${currentRestaurant}/category/${category.id}`)
                     if (typeof window !== 'undefined') {
                       (window as any).__mealCache = (window as any).__mealCache || {}
                       if (!(window as any).__mealCache[category.id]) {
