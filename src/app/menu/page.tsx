@@ -150,12 +150,12 @@ export default function MenuPage() {
                 key={category.id}
                 role="button"
                 tabIndex={0}
-                onClick={() => router.push(`/menu/${currentRestaurant}/category/${category.id}`)}
-                onKeyDown={(e) => { if (e.key === 'Enter') router.push(`/menu/${currentRestaurant}/category/${category.id}`) }}
+                onClick={() => router.push(`/menu/han-tagam/category/${category.id}`)}
+                onKeyDown={(e) => { if (e.key === 'Enter') router.push(`/menu/han-tagam/category/${category.id}`) }}
                 onPointerEnter={() => {
                   try {
                     // prefetch route
-                    (router as any).prefetch && (router as any).prefetch(`/menu/${currentRestaurant}/category/${category.id}`)
+                    (router as any).prefetch && (router as any).prefetch(`/menu/han-tagam/category/${category.id}`)
                     // warm up meals API once and cache in window and sessionStorage
                     if (typeof window !== 'undefined') {
                       (window as any).__mealCache = (window as any).__mealCache || {}
@@ -174,7 +174,7 @@ export default function MenuPage() {
                 }}
                 onFocus={() => {
                   try {
-                    (router as any).prefetch && (router as any).prefetch(`/menu/${currentRestaurant}/category/${category.id}`)
+                    (router as any).prefetch && (router as any).prefetch(`/menu/han-tagam/category/${category.id}`)
                     if (typeof window !== 'undefined') {
                       (window as any).__mealCache = (window as any).__mealCache || {}
                       if (!(window as any).__mealCache[category.id]) {
