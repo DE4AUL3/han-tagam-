@@ -221,7 +221,7 @@ export default function CategoryPage() {
         <div className="text-center">
           <h1 className={`text-2xl font-bold mb-4 ${theme.text}`}>Категория не найдена</h1>
           <button
-            onClick={() => router.push(`/menu/${restaurantId}`)}
+            onClick={() => router.push("/menu")}
             className={`inline-flex items-center px-4 py-2 rounded-lg transition-colors ${theme.accent} text-white`}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -250,7 +250,7 @@ export default function CategoryPage() {
             {/* Back Button + Title */}
             <div className="flex items-center space-x-4">
               <button
-                onClick={() => router.push(`/menu/${restaurantId}`)}
+                onClick={() => router.push("/menu")}
                 className={`p-2 transition-colors duration-200 ${theme.text}`}
                 aria-label="Назад к категориям"
               >
@@ -305,7 +305,7 @@ export default function CategoryPage() {
               <button
                 key={cat.id}
                 data-cat={cat.id}
-                onClick={() => router.push(`/menu/${restaurantId}/category/${cat.id}`)}
+                onClick={() => router.push(`/menu/category/${cat.id}`)}
                 className={`px-6 py-2 rounded-full whitespace-nowrap transition-all font-medium snap-center border ${cat.id === categoryId ? `${theme.accent} text-white` : `${theme.bgSecondary} ${theme.textSecondary} ${theme.border}`}`}
               >
                 {currentLanguage === 'tk' ? cat.nameTk : cat.name}
