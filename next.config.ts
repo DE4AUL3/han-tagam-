@@ -1,9 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Compression и minification
+  // Compression (swcMinify удален - теперь включен по умолчанию в Next.js 15)
   compress: true,
-  swcMinify: true,
   
   // Оптимизация production build
   compiler: {
@@ -12,7 +11,6 @@ const nextConfig: NextConfig = {
   
   // Оптимизация изображений
   images: {
-    domains: ['localhost', '127.0.0.1'],
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: 31536000, // 1 год
     deviceSizes: [640, 750, 828, 1080, 1200],
@@ -28,18 +26,6 @@ const nextConfig: NextConfig = {
         protocol: 'http',
         hostname: 'localhost',
         port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'http',
-        hostname: 'localhost',
-        port: '3000',
-        pathname: '/**',
-      },
-      {
-        protocol: 'http',
-        hostname: '127.0.0.1',
-        port: '3000',
         pathname: '/**',
       },
       {
