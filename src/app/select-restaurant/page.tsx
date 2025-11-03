@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Store, ArrowRight, MapPin, Clock, Phone } from 'lucide-react'
+import { Store, ArrowRight } from 'lucide-react'
 import Image from 'next/image'
 
 export default function SelectRestaurantPage() {
@@ -13,7 +13,7 @@ export default function SelectRestaurantPage() {
       nameTk: 'Han Tagam',
       description: 'Элегантная восточная кухня',
       descriptionTk: 'Şöhratly gündogar aşhanasy',
-      url: 'https://hantagam.com',
+      url: 'https://hantagam.com/menu',
       logo: '/images/han-tagam-logo.png',
       gradient: 'from-emerald-600 to-emerald-800',
       glowColor: 'emerald',
@@ -26,8 +26,8 @@ export default function SelectRestaurantPage() {
       nameTk: 'Panda Burger',
       description: 'Сочные бургеры премиум класса',
       descriptionTk: 'Ýokary hilli burgerler',
-      url: 'https://pandaburger.cloud',
-      logo: '/panda_logo.png',
+      url: 'https://pandaburger.cloud/menu',
+      logo: '/panda_logo.jpg',
       gradient: 'from-red-600 to-red-800',
       glowColor: 'red',
       features: ['Авторские бургеры', 'Быстрая доставка', 'Fresh напитки']
@@ -111,6 +111,7 @@ export default function SelectRestaurantPage() {
                         width={200}
                         height={200}
                         className="relative z-10 object-contain max-h-48 group-hover:scale-110 transition-transform duration-500"
+                        unoptimized
                       />
                     </div>
 
@@ -129,14 +130,14 @@ export default function SelectRestaurantPage() {
                     <div className="space-y-2 mb-8">
                       {restaurant.features.map((feature, idx) => (
                         <div key={idx} className="flex items-center space-x-2 text-gray-400">
-                          <div className={`w-1.5 h-1.5 rounded-full bg-${restaurant.glowColor}-500`}></div>
+                          <div className={`w-1.5 h-1.5 rounded-full ${restaurant.glowColor === 'emerald' ? 'bg-emerald-500' : 'bg-red-500'}`}></div>
                           <span className="text-sm">{feature}</span>
                         </div>
                       ))}
                     </div>
 
                     {/* Кнопка */}
-                    <div className={`flex items-center justify-between p-5 rounded-2xl bg-gradient-to-r ${restaurant.gradient} text-white font-semibold group-hover:shadow-2xl group-hover:shadow-${restaurant.glowColor}-500/50 transition-all duration-300`}>
+                    <div className={`flex items-center justify-between p-5 rounded-2xl bg-gradient-to-r ${restaurant.gradient} text-white font-semibold group-hover:shadow-2xl transition-all duration-300`}>
                       <span className="text-lg">Перейти к меню</span>
                       <ArrowRight className="w-6 h-6 group-hover:translate-x-3 transition-transform duration-300" />
                     </div>
@@ -146,28 +147,13 @@ export default function SelectRestaurantPage() {
             ))}
           </div>
 
-          {/* Информация */}
+          {/* Copyright */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1 }}
-            className="text-center space-y-6"
+            className="text-center"
           >
-            <div className="flex flex-wrap justify-center gap-8 text-gray-400">
-              <div className="flex items-center space-x-2">
-                <Clock className="w-5 h-5 text-emerald-400" />
-                <span>Ежедневно 10:00 - 23:00</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <MapPin className="w-5 h-5 text-red-400" />
-                <span>Доставка по городу</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Phone className="w-5 h-5 text-emerald-400" />
-                <span>Бронирование столов</span>
-              </div>
-            </div>
-            
             <p className="text-gray-600 text-sm">
               © 2025 Han Tagam & Panda Burger. Все права защищены.
             </p>
