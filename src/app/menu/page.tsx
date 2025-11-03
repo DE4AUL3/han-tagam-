@@ -29,36 +29,9 @@ export default function MenuPage() {
     // Загружаем категории из API
     const loadCategories = async () => {
       try {
-        // Проверяем кэш в sessionStorage
-        const cachedData = sessionStorage.getItem('categories')
-        const cacheTime = sessionStorage.getItem('categories_time')
-        const now = Date.now()
-        
-        // Если кэш свежий (< 5 минут), используем его
-        if (cachedData && cacheTime && (now - parseInt(cacheTime) < 5 * 60 * 1000)) {
-          const data = JSON.parse(cachedData)
-          const transformedCategories = data.map((cat: any) => ({
-            id: cat.id,
-            name: cat.nameRu,
-            nameTk: cat.nameTk,
-            image: cat.imageCard,
-            gradient: 'from-slate-500 to-slate-700',
-            description: cat.descriptionRu || '',
-            descriptionTk: cat.descriptionTk || '',
-            isActive: cat.status,
-            sortOrder: cat.order
-          }))
-          setCategories(transformedCategories)
-          return
-        }
-        
         const response = await fetch('/api/category')
         if (response.ok) {
           const data = await response.json()
-          
-          // Сохраняем в кэш
-          sessionStorage.setItem('categories', JSON.stringify(data))
-          sessionStorage.setItem('categories_time', now.toString())
           // Трансформируем данные из БД в формат Category
           const transformedCategories = data.map((cat: any) => ({
             id: cat.id,
