@@ -399,7 +399,7 @@ export default function CategoryPage() {
                           onClick={() => handleOrderClick(dish.id)}
                           className={`w-full py-3 rounded-2xl text-sm font-semibold transition-all duration-300 transform hover:scale-105 ${theme.accent} text-white`}
                         >
-                          Заказать
+                          {getText("order", currentLanguage)}
                         </button>
                       </>
                     )}
