@@ -32,24 +32,6 @@ interface Restaurant {
 
 const defaultRestaurants: Restaurant[] = [
   {
-    id: 'panda-burger',
-    name: 'Panda Burger',
-    logo: '/panda-burger-logo.svg',
-    description: 'Сочные бургеры и американская кухня премиум-класса',
-    descriptionTk: 'Damsly burgerler we ýokary derejeli amerikan aşhanasy',
-    cuisine: 'Американская кухня',
-    rating: 4.8,
-    phone: '+993 (12) 123-45-67',
-    address: 'г. Ашхабад, ул. Нейтральности, 15',
-    image: '/panda_logo.jpg',
-  gradient: 'from-emerald-500 via-teal-500 to-emerald-700',
-    features: ['Быстрая доставка', 'WiFi', 'QR заказ', 'Премиум качество'],
-  isOpen: true,
-  openingHours: '08:00 - 22:00',
-    deliveryTime: '20-30 мин',
-    deliveryTimeTk: '20-30 min'
-  },
-  {
     id: 'han-tagam',
     name: 'Han Tagam',
     logo: '/khan-tagam-logo.svg',
@@ -59,13 +41,31 @@ const defaultRestaurants: Restaurant[] = [
     rating: 4.9,
     phone: '+993 (65) 987-65-43',
     address: 'г. Ашхабад, ул. Туркменбаши, 28',
-  image: '/han_tagam2..jpg',
-  gradient: 'from-emerald-500 via-teal-500 to-emerald-700',
+    image: '/han_tagam2..jpg',
+    gradient: 'from-emerald-500 via-teal-500 to-emerald-700',
     features: ['Национальная кухня', 'WiFi', 'QR заказ', 'Авторские блюда'],
-  isOpen: true,
-  openingHours: '08:00 - 22:00',
+    isOpen: true,
+    openingHours: '08:00 - 22:00',
     deliveryTime: '35-45 мин',
     deliveryTimeTk: '35-45 min'
+  },
+  {
+    id: 'panda-burger',
+    name: 'Panda Burger',
+    logo: '/images/panda-burger-logo.svg',
+    description: 'Сочные бургеры и американская кухня премиум-класса',
+    descriptionTk: 'Damsly burgerler we ýokary derejeli amerikan aşhanasy',
+    cuisine: 'Американская кухня',
+    rating: 4.8,
+    phone: '+993 (12) 123-45-67',
+    address: 'г. Ашхабад, ул. Нейтральности, 15',
+    image: '/panda_logo.jpg',
+    gradient: 'from-red-500 via-orange-500 to-red-700',
+    features: ['Быстрая доставка', 'WiFi', 'QR заказ', 'Премиум качество'],
+    isOpen: true,
+    openingHours: '08:00 - 22:00',
+    deliveryTime: '20-30 мин',
+    deliveryTimeTk: '20-30 min'
   }
 ];
 
@@ -99,12 +99,13 @@ export default function PremiumRestaurantSelector() {
 
   const handleRestaurantSelect = (restaurantId: string) => {
     setSelectedId(restaurantId);
+    
     if (restaurantId === 'panda-burger') {
+      // Переход на другой домен
       window.location.href = 'https://pandaburger.cloud';
-    } else if (restaurantId === 'han-tagam') {
-      window.location.href = 'https://hantagam.com';
     } else {
-      router.push(`/menu/${restaurantId}`);
+      // Переход внутри Han Tagam
+      router.push('/menu');
     }
   };
 

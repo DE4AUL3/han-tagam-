@@ -6,6 +6,19 @@ import { v4 as uuidv4 } from 'uuid';
 import { existsSync } from 'fs';
 
 
+
+// Функция для отправки событий через SSE
+async function notifySSEClients(event: { type: string; data?: any }) {
+  try {
+    await fetch(process.env.BASE_URL + "/api/images/events", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(event)
+    });
+  } catch (error) {
+    console.error("Ошибка отправки SSE события:", error);
+  }
+}
 // Загрузка файла на сервер
 async function saveFile(file: File, category: string): Promise<{ 
   success: boolean; 
@@ -123,6 +136,18 @@ export async function POST(request: NextRequest) {
       });
       
       console.log("Изображение успешно сохранено в БД:", image.id);
+      
+      // НОВОЕ: Уведомляем клиентов о новом изображении
+      await notifySSEClients({
+        type: 'image_uploaded',
+        data: {
+          id: image.id,
+          filename: file.name,
+          url: saveResult.filePath,
+          category,
+          timestamp: new Date().toISOString()
+        }
+      });
       
       return NextResponse.json({
         success: true,
@@ -254,7 +279,16 @@ export async function DELETE(request: NextRequest) {
       where: { id }
     });
     
-    // Примечание: физическое удаление файла можно добавить при необходимости
+    // НОВОЕ: Уведомляем клиентов об удалении изображения
+    await notifySSEClients({
+      type: 'image_deleted',
+      data: {
+        id: image.id,
+        url: image.path,
+        category: image.category,
+        timestamp: new Date().toISOString()
+      }
+    });
     
     return NextResponse.json({
       success: true,

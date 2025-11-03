@@ -6,6 +6,8 @@ import DishCard from '@/components/DishCard';
 import FloatingCallButton from '@/components/FloatingCallButton';
 import Header from '@/components/Header';
 import { useTranslation } from '@/components/LanguageToggle';
+import { useLanguage } from '@/hooks/useLanguage'
+import { getText } from '@/i18n/translations'
 import { Category, Dish } from '@/types';
 import { getAppThemeClasses } from '@/styles/appTheme';
 // back navigation intentionally removed for category listing
@@ -16,6 +18,7 @@ export default function CategoryPage() {
   const [category, setCategory] = useState<Category | null>(null);
   const [dishes, setDishes] = useState<Dish[]>([]);
   const { t } = useTranslation();
+  const { currentLanguage } = useLanguage();
 
   // TODO: Production: Получать категорию и блюда по id через API/SSR/Server Actions
   // Пример:
@@ -72,10 +75,10 @@ export default function CategoryPage() {
               <span className="text-3xl">🍽️</span>
             </div>
             <h3 className={`text-xl font-semibold ${theme.text} mb-2`}>
-              Пока нет блюд
+              {getText('noDishesYet', currentLanguage)}
             </h3>
             <p className={theme.textSecondary}>
-              В этой категории скоро появятся новые блюда
+              {getText('newDishesComingSoon', currentLanguage)}
             </p>
           </div>
         )}

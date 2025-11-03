@@ -17,7 +17,7 @@ export interface DatabaseCategory {
   imageBackground: string;
   order: number;
   status: boolean;
-  restaurantId: string;
+  restaurantId: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -68,7 +68,7 @@ export interface CreateCategory {
   imageBackground: string;
   order: number;
   status?: boolean;
-  restaurantId?: string;
+  restaurantId?: number;
 }
 
 export interface CreateMeal {
@@ -100,7 +100,7 @@ export interface UpdateCategory {
   imageBackground?: string;
   order?: number;
   status?: boolean;
-  restaurantId?: string;
+  restaurantId?: number;
 }
 
 export interface UpdateMeal {

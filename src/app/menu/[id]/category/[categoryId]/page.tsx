@@ -8,6 +8,8 @@ import { useRouter, useParams, useSearchParams } from 'next/navigation'
 import { ShoppingCart, Globe, ArrowLeft, Plus, Minus } from 'lucide-react'
 import Image from 'next/image'
 import { useLanguage } from '@/hooks/useLanguage'
+import { getText, getPluralForm } from '@/i18n/translations'
+import { getImageUrl } from "@/lib/imageUtils"
 import { useCart } from '@/hooks/useCart'
 import { imageService } from '@/lib/imageService'
 import FloatingCallButton from '@/components/FloatingCallButton'
@@ -234,7 +236,7 @@ export default function CategoryPage() {
   // Получаем изображение для заголовка категории (упрощённо)
   const getCategoryHeaderImage = () => {
     const img = state.category?.dishPageImage || state.category?.image;
-    return img ? imageService.getImageUrl(img) : '/images/placeholder.svg';
+    return img ? img : '/images/placeholder.svg';
   }
 
   // scrollIntoView для активной категории
@@ -260,7 +262,7 @@ export default function CategoryPage() {
                   {currentLanguage === 'tk' ? state.category.nameTk : state.category.name}
                 </h1>
                 <p className={`text-sm ${theme.textSecondary}`}>
-                  {(state.dishes?.length ?? 0)} блюд{(state.dishes?.length ?? 0) !== 1 && (state.dishes?.length ?? 0) < 5 ? 'а' : ''}
+                  {(state.dishes?.length ?? 0)} {getPluralForm((state.dishes?.length ?? 0), currentLanguage, getText('dishesCount', currentLanguage))}
                 </p>
               </div>
             </div>
@@ -317,7 +319,7 @@ export default function CategoryPage() {
       <main className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 transition-all duration-300 ${state.fade === 'out' ? 'opacity-0 scale-[0.99] pointer-events-none' : 'opacity-100 scale-100'}`}>
         {state.dishes.length === 0 ? (
           <div className="text-center py-12">
-            <p className={`text-lg ${theme.textSecondary}`}>В этой категории пока нет блюд</p>
+            <p className={`text-lg ${theme.textSecondary}`}>{getText('noDishesInCategory', currentLanguage)}</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
@@ -332,7 +334,7 @@ export default function CategoryPage() {
                   {/* Image */}
                   <div className={`relative h-40 sm:h-44 lg:h-48 overflow-hidden ${theme.bgSecondary}`}>
                     <Image
-                      src={dish.image ? imageService.getImageUrl(dish.image) : '/images/placeholder.svg'}
+                      src={getImageUrl(dish.image)}
                       alt={currentLanguage === 'tk' ? dish.name.tk : dish.name.ru}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -347,7 +349,7 @@ export default function CategoryPage() {
                           <button
                             onClick={() => decreaseQuantity(dish.id)}
                             className={`w-6 h-6 rounded-full flex items-center justify-center border transition-colors ${theme.bgSecondary} ${theme.text}`}
-                            aria-label="Уменьшить количество"
+                            aria-label={getText('decreaseQuantity', currentLanguage)}
                           >
                             <Minus className="w-4 h-4" />
                           </button>
@@ -355,7 +357,7 @@ export default function CategoryPage() {
                           <button
                             onClick={() => increaseQuantity(dish.id)}
                             className={`w-6 h-6 rounded-full flex items-center justify-center border transition-colors ${theme.bgSecondary} ${theme.text}`}
-                            aria-label="Увеличить количество"
+                            aria-label={getText('increaseQuantity', currentLanguage)}
                           >
                             <Plus className="w-4 h-4" />
                           </button>
@@ -363,7 +365,7 @@ export default function CategoryPage() {
                         {/* Total, Add to Cart and Back */}
                         <div className="pt-1.5">
                           <div className="text-center mb-1.5">
-                            <span className={`text-sm sm:text-base font-bold ${theme.text}`}>{`Итого: ${dish.price * quantity} ТМТ`}</span>
+                            <span className={`text-sm sm:text-base font-bold ${theme.text}`}>{`${getText('total', currentLanguage)}: ${dish.price * quantity} ${getText('currency', currentLanguage)}`}</span>
                           </div>
                           <div className="flex gap-2">
                             <button

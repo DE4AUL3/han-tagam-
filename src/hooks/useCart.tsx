@@ -4,6 +4,7 @@ import { createContext, useContext, useReducer, ReactNode, useEffect } from 'rea
 import { CartItem } from '@/types/menu'
 import { saveToStorage, loadFromStorage } from '@/lib/utils'
 import { APP_CONFIG } from '@/config/constants'
+import { useDelivery } from '@/hooks/useDelivery'
 
 interface CartState {
   items: CartItem[]
@@ -18,6 +19,7 @@ type CartAction =
   | { type: 'REMOVE_ITEM'; payload: { id: string } }
   | { type: 'CLEAR_CART' }
   | { type: 'SET_LOADING'; payload: boolean }
+  | { type: 'SET_DELIVERY_FEE'; payload: number }
   | { type: 'HYDRATE_CART'; payload: CartItem[] }
 
 const CartContext = createContext<{
@@ -106,6 +108,12 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         ...state,
         isLoading: action.payload
       }
+
+    case 'SET_DELIVERY_FEE':
+      return {
+        ...state,
+        deliveryFee: action.payload
+      }
     
     case 'HYDRATE_CART': {
       const totalAmount = action.payload.reduce((sum, item) => sum + (item.price * item.quantity), 0)
@@ -130,6 +138,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     isLoading: true
   })
 
+  const { calculateDelivery } = useDelivery()
+
   // Гидратация из localStorage при инициализации
   useEffect(() => {
     const savedCart = loadFromStorage<CartItem[]>('cart-items', [])
@@ -142,6 +152,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
       saveToStorage('cart-items', state.items)
     }
   }, [state.items, state.isLoading])
+
+  // Обновление стоимости доставки при изменении корзины
+  useEffect(() => {
+    if (!state.isLoading && calculateDelivery) {
+      calculateDelivery(state.totalAmount).then(deliveryInfo => {
+        if (deliveryInfo) {
+          dispatch({ type: "SET_DELIVERY_FEE", payload: deliveryInfo.deliveryFee });
+        }
+      }).catch(error => {
+        console.error("Ошибка расчета доставки:", error);
+      });
+    }
+  }, [state.totalAmount, state.isLoading, calculateDelivery])
 
   // Удобные методы
   const addItem = (item: CartItem) => {

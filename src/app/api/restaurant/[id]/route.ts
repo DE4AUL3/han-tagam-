@@ -7,7 +7,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const r = await prisma.restaurant.findUnique({ where: { id } });
+    const r = await prisma.restaurant.findUnique({ where: { id: parseInt(id) } });
     if (!r) {
       return NextResponse.json({ error: 'Ресторан не найден' }, { status: 404 });
     }
@@ -26,7 +26,7 @@ export async function GET(
       image: r.image || '',
       gradient: r.gradient,
   features: Array.isArray(r.features) ? (r.features as unknown as string[]) : [],
-      isOpen: r.isOpen,
+      isOpen: r.is_open,
       deliveryTime: r.deliveryTime || '',
       deliveryTimeTk: r.deliveryTime || ''
     };

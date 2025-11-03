@@ -32,7 +32,7 @@ export default function SmartImage({
   const [imageError, setImageError] = useState(false);
   
   // Получаем URL изображения через imageService
-  const imageUrl = imageService.getImageUrl(src);
+  const imageUrl = src.startsWith("http") ? src : `/images/${src}`;
   
   // Обработчик ошибок изображения
   const handleError = () => {

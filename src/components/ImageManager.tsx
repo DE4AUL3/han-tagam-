@@ -180,7 +180,7 @@ export default function ImageManager() {
             <div key={image.id} className={`${theme.cardBg} rounded-lg overflow-hidden shadow-md`}>
               <div className={`aspect-square ${theme.bgSecondary}`}>
                 <img
-                  src={imageService.getImageUrl(image.url)}
+                  src={image.url.startsWith("http") ? image.url : `/images/${image.url}`}
                   alt={image.alt || image.filename}
                   className="w-full h-full object-cover"
                   onError={(e) => {

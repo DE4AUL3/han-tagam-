@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { useCart } from '@/hooks/useCart'
 import { useTheme } from '@/hooks/useTheme'
+import { useLanguage } from '@/hooks/useLanguage'
+import { getText } from '@/i18n/translations'
 import { db } from '@/lib/database'
 import { Phone, X } from 'lucide-react'
 
@@ -15,6 +17,7 @@ interface OrderFormProps {
 export default function OrderForm({ isOpen, onClose, onSuccess }: OrderFormProps) {
   const { state, clearCart } = useCart()
   const { currentRestaurant } = useTheme()
+  const { currentLanguage } = useLanguage()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     phone: '',
@@ -129,7 +132,7 @@ export default function OrderForm({ isOpen, onClose, onSuccess }: OrderFormProps
           <h2 className={`text-xl font-bold ${
             isDark ? 'text-white' : 'text-gray-900'
           }`}>
-            Оформление заказа
+            {getText('orderFormTitle', currentLanguage)}
           </h2>
           <button
             onClick={onClose}
@@ -143,7 +146,7 @@ export default function OrderForm({ isOpen, onClose, onSuccess }: OrderFormProps
 
         <div className={`p-6 border-b ${isDark ? 'border-gray-600' : 'border-gray-200'}`}>
           <h3 className={`font-semibold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            Ваш заказ:
+            {getText('yourOrder', currentLanguage)}:
           </h3>
           <div className="space-y-2">
             {state.items.map((item) => (
@@ -172,7 +175,7 @@ export default function OrderForm({ isOpen, onClose, onSuccess }: OrderFormProps
             <label className={`block text-sm font-medium mb-2 ${
               isDark ? 'text-gray-300' : 'text-gray-700'
             }`}>
-              Номер телефона *
+              {getText('phoneNumber', currentLanguage)} *
             </label>
             <div className="relative">
               <Phone className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
@@ -201,10 +204,10 @@ export default function OrderForm({ isOpen, onClose, onSuccess }: OrderFormProps
             {isSubmitting ? (
               <div className="flex items-center justify-center space-x-2">
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                <span>Оформляем заказ...</span>
+                <span>{getText('submittingOrder', currentLanguage)}...</span>
               </div>
             ) : (
-              'Подтвердить заказ'
+              getText('submitOrder', currentLanguage)
             )}
           </button>
         </form>

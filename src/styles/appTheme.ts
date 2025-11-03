@@ -1,3 +1,57 @@
+// 🔥 Panda Dark Theme
+const pandaDarkColors: AppThemeColors = {
+  primary: {
+    background: '#0e0e10', // глубокий графит
+    surface: '#1f1f22',
+    text: '#f5f5f4'
+  },
+  secondary: {
+    background: '#1a1a1d',
+    surface: '#27272a',
+    text: '#a1a1aa',
+    border: '#2d2d30'
+  },
+  accent: {
+    primary: 'from-[#b8252b] to-[#e0343a]', // бургерный бордо
+    secondary: 'from-[#d4af37] to-[#e4c257]', // золотой акцент
+    success: 'from-emerald-500 to-green-600',
+    warning: 'from-amber-500 to-orange-500',
+    error: 'from-red-500 to-rose-600'
+  }
+}
+
+const pandaDarkClasses: AppThemeClasses = {
+  background: 'bg-[#0e0e10]',
+  surface: 'bg-[#1f1f22]',
+  card: 'bg-[#1f1f22] border border-[#2d2d30]/50 shadow-sm',
+
+  bg: 'bg-[#0e0e10]',
+  bgSecondary: 'bg-[#1a1a1d]',
+  cardBg: 'bg-[#1f1f22] border border-[#2d2d30]/50',
+
+  text: 'text-[#f5f5f4]',
+  textSecondary: 'text-[#a1a1aa]',
+  textMuted: 'text-[#7c7c85]',
+
+  hover: 'hover:bg-[#27272a]',
+  accent: 'bg-linear-to-r from-[#b8252b] to-[#e0343a]',
+  accentSecondary: 'bg-linear-to-r from-[#d4af37] to-[#e4c257]',
+
+  success: 'text-emerald-400 bg-emerald-900/20',
+  warning: 'text-amber-400 bg-amber-900/20',
+  error: 'text-red-400 bg-red-900/20',
+
+  border: 'border-[#2d2d30]',
+  borderLight: 'border-[#27272a]',
+
+  gradients: {
+    main: 'bg-gradient-to-br from-[#0e0e10] via-[#1a1a1d] to-[#1f1f22]',
+    accent: 'from-[#b8252b] to-[#e0343a]',
+    card: 'from-[#1f1f22] via-[#1a1a1d] to-[#27272a]',
+    hero: 'from-[#b8252b] via-[#d4af37] to-[#e0343a]'
+  }
+}
+
 // 🌟 Gold Elegance Theme
 const goldEleganceColors: AppThemeColors = {
   primary: {
@@ -324,6 +378,10 @@ const appThemes: Record<string, { colors: AppThemeColors; classes: AppThemeClass
   'gold-elegance': {
     colors: goldEleganceColors,
     classes: goldEleganceClasses
+  },
+  'panda-dark': {
+    colors: pandaDarkColors,
+    classes: pandaDarkClasses
   }
 }
 

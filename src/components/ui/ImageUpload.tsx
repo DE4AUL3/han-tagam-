@@ -27,7 +27,7 @@ export default function ImageUpload({
   // Получаем URL для предварительного просмотра
   const getDisplayUrl = useCallback(() => {
     if (previewUrl) return previewUrl;
-    if (currentImage) return imageService.getImageUrl(currentImage);
+    if (currentImage) return currentImage.startsWith("http") ? currentImage : `/images/${currentImage}`;
     return null;
   }, [currentImage, previewUrl]);
 

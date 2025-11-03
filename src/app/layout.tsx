@@ -1,7 +1,7 @@
 import "./globals.css";
 export const metadata = {
-  title: "Han Tagam — QR-меню для ресторанов",
-  description: "Han Tagam — элегантное светлое QR-меню с админкой и мультиязычностью.",
+  title: "Han Tagam — Ресторан туркменской кухни",
+  description: "Han Tagam — ресторан традиционной туркменской кухни с доставкой. Попробуйте аутентичные блюда Туркменистана.",
   keywords: [
     'QR меню',
     'ресторан',

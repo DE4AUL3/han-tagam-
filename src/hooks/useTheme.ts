@@ -11,9 +11,9 @@ export function useTheme() {
   useEffect(() => {
     setMounted(true)
     
-    // Загружаем выбранный ресторан
-    const savedRestaurant = localStorage.getItem('selectedRestaurant') || 'han-tagam'
-    setCurrentRestaurant(savedRestaurant)
+    // Принудительно устанавливаем han-tagam для этого проекта
+    setCurrentRestaurant('han-tagam')
+    localStorage.setItem('selectedRestaurant', 'han-tagam')
     
     // Всегда применяем темную тему
     setTheme('dark')
@@ -35,8 +35,9 @@ export function useTheme() {
   }
 
   const setRestaurant = (restaurant: string) => {
-    setCurrentRestaurant(restaurant)
-    localStorage.setItem('selectedRestaurant', restaurant)
+    // Принудительно оставляем han-tagam для этого проекта
+    setCurrentRestaurant('han-tagam')
+    localStorage.setItem('selectedRestaurant', 'han-tagam')
   }
 
   // Убираем функции переключения темы, поскольку теперь всегда темная тема

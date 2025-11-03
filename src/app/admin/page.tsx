@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Eye, EyeOff } from 'lucide-react';
 
 export default function AdminLogin() {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -24,11 +24,11 @@ export default function AdminLogin() {
     setError('');
 
     // Простая проверка на клиенте (в реальном проекте должна быть серверная аутентификация)
-    if (email === 'admin@restaurant.kg' && password === 'admin123') {
+    if (username === 'hantagam_admin' && password === 'betchorba25') {
       localStorage.setItem('isAdmin', 'true');
       router.push('/admin/dashboard');
     } else {
-      setError('Неверный email или пароль');
+      setError('Неверный логин или пароль. Проверьте данные и попробуйте снова.');
     }
   };
 
@@ -45,16 +45,16 @@ export default function AdminLogin() {
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
-          <div>
+                    <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Email
+              Логин
             </label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-[#212121] text-gray-900 dark:text-white"
-              placeholder="admin@restaurant.kg"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-[#333] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200"
+              placeholder="Введите логин"
               required
             />
           </div>
@@ -69,7 +69,7 @@ export default function AdminLogin() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-[#212121] text-gray-900 dark:text-white"
-                placeholder="admin123"
+                placeholder="Пароль"
                 required
               />
               <button
@@ -83,8 +83,13 @@ export default function AdminLogin() {
           </div>
 
           {error && (
-            <div className="text-red-600 dark:text-red-400 text-sm text-center">
-              {error}
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 text-red-700 dark:text-red-400 text-sm">
+              <div className="flex items-center">
+                <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                {error}
+              </div>
             </div>
           )}
 
@@ -95,12 +100,6 @@ export default function AdminLogin() {
             Войти
           </button>
         </form>
-
-        <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-          <p>Тестовые данные:</p>
-          <p>Email: admin@restaurant.kg</p>
-          <p>Пароль: admin123</p>
-        </div>
       </div>
     </div>
   );

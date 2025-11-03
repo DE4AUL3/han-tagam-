@@ -1,11 +1,8 @@
 'use client';
 
-
-"use client";
-
 import type { MenuItem, CartItem } from "@/types/menu";
 import { Star, Clock, Plus, Minus, ShoppingCart } from "lucide-react";
-
+import Header from '@/components/Header';
 
 import React, { useState } from "react";
 interface RestaurantMenuProps {
@@ -85,6 +82,7 @@ export default function RestaurantMenu({ restaurant, menuItems, categories }: Re
 
   return (
     <div>
+      <Header restaurantName={restaurant.name} />
       <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             {/* Информация о ресторане */}

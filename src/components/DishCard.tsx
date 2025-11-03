@@ -1,6 +1,7 @@
 "use client";
 
 import Image from 'next/image';
+import { DishImage } from "./OptimizedImage";
 import { useState } from 'react';
 import { ShoppingCart, ArrowLeft } from 'lucide-react';
 
@@ -42,9 +43,9 @@ export default function DishCard({ dish }: DishCardProps) {
     >
       {/* Image */}
   <div className={`relative h-64 md:h-72 w-full ${themeClasses.bgSecondary}`}> 
-        <Image
-          src={dish.image || '/images/menu/placeholder.jpg'}
-          alt={dish.name}
+        <DishImage dish={dish}
+          
+          
           fill
           sizes="(max-width: 768px) 100vw, 33vw"
           className="object-cover"

@@ -12,7 +12,7 @@ export async function GET(
     const categories = await prisma.category.findMany({
       where: {
         status: true,
-        restaurantId
+        restaurantId: parseInt(restaurantId)
       },
       orderBy: {
         order: 'asc'

@@ -5,17 +5,17 @@
 
 export const PRODUCTION_CONFIG = {
   // Настройки API
-  API_BASE_URL: process.env.NODE_ENV === 'production' 
-    ? 'https://hantagam.com/api' 
-    : 'http://localhost:3000/api',
+  API_BASE_URL: process.env.NEXT_PUBLIC_API_URL 
+    ? `${process.env.NEXT_PUBLIC_API_URL}/api`
+    : process.env.NODE_ENV === 'production' 
+      ? 'https://hantagam.com/api' 
+      : 'http://localhost:3001/api',
   
   // Настройки CORS для админ-панели
   CORS_ORIGINS: [
     'https://hantagam.com',
     'https://admin.hantagam.com',
-    'https://pandaburger.cloud',
-    'https://admin.pandaburger.cloud',
-    'http://localhost:3000'
+    'http://localhost:3001'
   ],
   
   // Настройки файлового хранилища

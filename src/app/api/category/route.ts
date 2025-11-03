@@ -36,7 +36,11 @@ export async function POST(request: Request) {
         restaurant: {
           connectOrCreate: {
             where: { id: restaurantId },
-            create: { id: restaurantId, slug: restaurantId, name: restaurantId },
+            create: { 
+              id: restaurantId, 
+              slug: String(restaurantId), 
+              name: String(restaurantId) 
+            },
           },
         },
       },

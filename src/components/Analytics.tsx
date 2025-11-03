@@ -21,9 +21,14 @@ export default function Analytics({
 }: AnalyticsProps) {
   const pathname = usePathname()
 
+  // Отключаем аналитику в development или с тестовыми ID
+  const isProduction = process.env.NODE_ENV === 'production'
+  const hasValidGA = googleAnalyticsId && googleAnalyticsId !== 'G-XXXXXXXXXX'
+  const hasValidYM = yandexMetricaId && yandexMetricaId !== '12345678'
+
   // Google Analytics
   useEffect(() => {
-    if (!googleAnalyticsId) return
+    if (!isProduction || !hasValidGA) return
 
     // Загружаем Google Analytics
     const script = document.createElement('script')
@@ -43,11 +48,11 @@ export default function Analytics({
     return () => {
       document.head.removeChild(script)
     }
-  }, [googleAnalyticsId])
+  }, [googleAnalyticsId, isProduction, hasValidGA])
 
   // Yandex Metrica
   useEffect(() => {
-    if (!yandexMetricaId) return
+    if (!isProduction || !hasValidYM) return
 
     // Загружаем Yandex Metrica
     const script = document.createElement('script')
@@ -68,20 +73,27 @@ export default function Analytics({
     return () => {
       document.head.removeChild(script)
     }
-  }, [yandexMetricaId])
+  }, [yandexMetricaId, isProduction, hasValidYM])
 
   // Отслеживание переходов между страницами
   useEffect(() => {
-    if (typeof window.gtag !== 'undefined') {
+    if (!isProduction) return
+
+    if (hasValidGA && typeof window.gtag !== 'undefined') {
       window.gtag('config', googleAnalyticsId, {
         page_path: pathname,
       })
     }
 
-    if (typeof window.ym !== 'undefined') {
+    if (hasValidYM && typeof window.ym !== 'undefined') {
       window.ym(parseInt(yandexMetricaId), 'hit', pathname)
     }
-  }, [pathname, googleAnalyticsId, yandexMetricaId])
+  }, [pathname, googleAnalyticsId, yandexMetricaId, isProduction, hasValidGA, hasValidYM])
+
+  // Не рендерим noscript в development или с тестовыми ID
+  if (!isProduction || !hasValidYM) {
+    return null
+  }
 
   return (
     <>
@@ -103,6 +115,8 @@ export default function Analytics({
 export const trackEvent = {
   // Отслеживание добавления в корзину
   addToCart: (dishName: string, price: number, quantity: number) => {
+    if (process.env.NODE_ENV !== 'production') return
+
     if (typeof window.gtag !== 'undefined') {
       window.gtag('event', 'add_to_cart', {
         currency: 'TMT',
@@ -126,6 +140,8 @@ export const trackEvent = {
 
   // Отслеживание оформления заказа
   purchase: (orderId: string, totalAmount: number, items: any[]) => {
+    if (process.env.NODE_ENV !== 'production') return
+
     if (typeof window.gtag !== 'undefined') {
       window.gtag('event', 'purchase', {
         transaction_id: orderId,
@@ -145,6 +161,8 @@ export const trackEvent = {
 
   // Отслеживание просмотра категории
   viewCategory: (categoryName: string) => {
+    if (process.env.NODE_ENV !== 'production') return
+
     if (typeof window.gtag !== 'undefined') {
       window.gtag('event', 'view_category', {
         category: categoryName
@@ -160,6 +178,8 @@ export const trackEvent = {
 
   // Отслеживание звонка
   phoneCall: (phoneNumber: string) => {
+    if (process.env.NODE_ENV !== 'production') return
+
     if (typeof window.gtag !== 'undefined') {
       window.gtag('event', 'phone_call', {
         phone: phoneNumber

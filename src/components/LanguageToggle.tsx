@@ -15,35 +15,43 @@ interface Translations {
 const translations: Translations = {
   selectCategory: {
     ru: 'Выберите категорию блюд',
-    tm: 'Выберите категорию блюд'
+    tm: 'Tagam kategoriýasyny saýlaň'
   },
   dishes: {
     ru: 'блюд',
-    tm: 'блюд'
+    tm: 'tagam'
   },
   order: {
     ru: 'Заказать',
-    tm: 'Заказать'
+    tm: 'Sargyt etmek'
   },
   contacts: {
     ru: 'Контакты',
-    tm: 'Контакты'
+    tm: 'Habarlaşmak'
   },
   call: {
     ru: 'Позвонить',
-    tm: 'Позвонить'
+    tm: 'Jaň etmek'
   },
   saveContact: {
     ru: 'Сохранить контакт',
-    tm: 'Сохранить контакт'
+    tm: 'Kontakty ýatda saklamak'
   },
   back: {
     ru: 'Назад',
-    tm: 'Назад'
+    tm: 'Yza'
   },
   inCategory: {
     ru: 'в категории',
-    tm: 'в категории'
+    tm: 'kategoriýada'
+  },
+  cart: {
+    ru: 'Корзина',
+    tm: 'Sebet'
+  },
+  addToCart: {
+    ru: 'Добавить в корзину',
+    tm: 'Sebede goşmak'
   }
 };
 

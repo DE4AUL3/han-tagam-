@@ -1,8 +1,6 @@
-// --- END OF FILE ---
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useTheme } from "@/hooks/useTheme";
 import { useLanguage } from "@/hooks/useLanguage";
 import { dataService } from "@/lib/dataService";
 import { DollarSign, Edit, Save, X } from "lucide-react";
@@ -12,89 +10,49 @@ interface CartSettingsProps {
 }
 
 const CartSettings: React.FC<CartSettingsProps> = ({ restaurantId }) => {
-  // const { isDarkMode } = useTheme();
   const { currentLanguage: language } = useLanguage();
-  const [cartSettings, setCartSettings] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-  const [deliveryPrice, setDeliveryPrice] = useState<number>(0);
+  const [deliveryPrice, setDeliveryPrice] = useState<number>(50);
 
   useEffect(() => {
-    loadCartSettings();
-    // eslint-disable-next-line
-  }, [restaurantId]);
+    loadSettings();
+  }, []);
 
-  const loadCartSettings = async () => {
-    setIsLoading(true);
+  const loadSettings = async () => {
     try {
       const settings = await dataService.getCartSettings(restaurantId);
       if (settings) {
-        setCartSettings(settings);
-        setDeliveryPrice(settings.deliveryPrice || 0);
-      } else {
-        const defaultSettings = {
-          id: `cart_${restaurantId}`,
-          restaurantId,
-          deliveryZones: [],
-          deliveryPrice: 0,
-          minOrderAmount: 50,
-          freeDeliveryAmount: 200,
-          currency: "ТМТ",
-          workingHours: { from: "09:00", to: "22:00" },
-          workingDays: [1, 2, 3, 4, 5, 6],
-          isDeliveryEnabled: true,
-          isTakeawayEnabled: true,
-          orderProcessingTime: { min: 30, max: 60 },
-          settings: {
-            allowScheduledOrders: true,
-            requirePhone: true,
-            requireAddress: true,
-            autoConfirmOrders: false,
-          },
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        };
-        setCartSettings(defaultSettings);
-        setDeliveryPrice(0);
-        await dataService.saveCartSettings(defaultSettings);
+        setDeliveryPrice(settings.deliveryPrice || 50);
       }
     } catch (error) {
-      console.error("Ошибка загрузки настроек корзины:", error);
+      console.error("Ошибка загрузки настроек:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleSaveSettings = async () => {
-    if (!cartSettings) return;
     try {
-      const updatedSettings = {
-        ...cartSettings,
-        deliveryPrice: deliveryPrice,
-        updatedAt: new Date().toISOString(),
-      };
-      await dataService.saveCartSettings(updatedSettings);
-      setCartSettings(updatedSettings);
+      await dataService.saveCartSettings({
+        id: `cart_${restaurantId}`,
+        restaurantId,
+        deliveryPrice,
+        currency: "ТМТ",
+        updatedAt: new Date().toISOString()
+      });
       setIsEditing(false);
+      // Уведомляем другие компоненты об изменении
       dataService.emitEvent({
         type: "cart_settings_updated",
-        data: updatedSettings,
+        data: { deliveryPrice }
       });
     } catch (error) {
       console.error("Ошибка сохранения настроек:", error);
     }
   };
 
-  const handleEditSettings = () => {
-    setIsEditing(true);
-  };
-
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-    setDeliveryPrice(cartSettings?.deliveryPrice || 0);
-  };
-
-  if (isLoading || !cartSettings) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -113,7 +71,7 @@ const CartSettings: React.FC<CartSettingsProps> = ({ restaurantId }) => {
         <div className="flex space-x-2">
           {!isEditing ? (
             <button
-              onClick={handleEditSettings}
+              onClick={() => setIsEditing(true)}
               className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               <Edit className="w-4 h-4" />
@@ -129,7 +87,7 @@ const CartSettings: React.FC<CartSettingsProps> = ({ restaurantId }) => {
                 <span>{language === "ru" ? "Сохранить" : "Ýatda saklamak"}</span>
               </button>
               <button
-                onClick={handleCancelEdit}
+                onClick={() => setIsEditing(false)}
                 className="flex items-center space-x-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
               >
                 <X className="w-4 h-4" />
@@ -140,26 +98,29 @@ const CartSettings: React.FC<CartSettingsProps> = ({ restaurantId }) => {
         </div>
       </div>
 
-      {/* Глобальная цена доставки */}
-  <div className="p-6 rounded-lg border bg-white border-gray-200">
+      {/* Цена доставки */}
+      <div className="p-6 rounded-lg border bg-white border-gray-200">
         <div className="flex items-center mb-4">
           <DollarSign className="w-6 h-6 mr-2 text-blue-600" />
-          <h3 className="text-lg font-semibold text-gray-900">{language === "ru" ? "Цена доставки" : "Eltip bermek bahasy"}</h3>
+          <h3 className="text-lg font-semibold text-gray-900">
+            {language === "ru" ? "Стоимость доставки" : "Eltip bermek bahasy"}
+          </h3>
         </div>
+        
         {isEditing ? (
           <div className="flex items-center gap-4">
             <input
               type="number"
               value={deliveryPrice}
-              onChange={e => setDeliveryPrice(Number(e.target.value))}
+              onChange={(e) => setDeliveryPrice(Number(e.target.value))}
               className="w-32 px-3 py-2 border rounded-lg bg-white border-gray-300 text-gray-900"
               min={0}
             />
-            <span className="text-gray-600">{cartSettings.currency}</span>
+            <span className="text-gray-600">ТМТ</span>
           </div>
         ) : (
           <div className="text-xl font-bold">
-            {cartSettings.deliveryPrice} {cartSettings.currency}
+            {deliveryPrice} ТМТ
           </div>
         )}
       </div>

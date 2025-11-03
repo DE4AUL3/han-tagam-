@@ -12,6 +12,7 @@ import { Category } from '@/types/menu'
 import { imageService } from '@/lib/imageService'
 import FloatingCallButton from '@/components/FloatingCallButton'
 import { getAppThemeColors, getAppThemeClasses } from '@/styles/appTheme'
+import { getImageUrl } from "@/lib/imageUtils"
 
 export default function MenuPage() {
   const router = useRouter()
@@ -211,7 +212,7 @@ export default function MenuPage() {
                     <div className="w-full h-full sm:w-full sm:h-full backdrop-blur-md flex items-center justify-center z-10 transform group-hover:scale-125 transition-transform duration-300 bg-white">
                       {category.image ? (
                         <Image
-                          src={imageService.getImageUrl(category.image)}
+                          src={getImageUrl(category.image)}
                           alt={category.name}
                           width={200}
                           height={200}

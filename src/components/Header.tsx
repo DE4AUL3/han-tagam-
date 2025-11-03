@@ -1,9 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { MapPin, Clock, Star } from 'lucide-react';
+import { MapPin, Clock, Star, ShoppingCart } from 'lucide-react';
 import LanguageToggle from './LanguageToggle';
 import { useTheme } from '@/hooks/useTheme';
+import { useCart } from '@/hooks/useCart';
+import { useLanguage } from '@/hooks/useLanguage';
+import { getText } from '@/i18n/translations';
 
 interface HeaderProps {
   restaurantName: string;
@@ -12,6 +15,8 @@ interface HeaderProps {
 export default function Header({ restaurantName }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const { currentRestaurant } = useTheme();
+  const { state: cartState } = useCart();
+  const { currentLanguage } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,10 +50,10 @@ export default function Header({ restaurantName }: HeaderProps) {
             
             {/* Левая часть - Логотип и информация */}
             <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-              {/* Компактный логотип */}
+              {/* Яркий логотип - v2.0 */}
               <div className="flex-shrink-0">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
-                  <span className="text-white font-bold text-sm sm:text-lg">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-emerald-500 via-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 ring-2 ring-white/20">
+                  <span className="text-white font-bold text-sm sm:text-lg drop-shadow-lg">
                     {restaurantName.charAt(0)}
                   </span>
                 </div>
@@ -140,7 +145,21 @@ export default function Header({ restaurantName }: HeaderProps) {
             {/* Правая часть - Компактные кнопки */}
             <div className="flex items-center gap-1 flex-shrink-0">
               <LanguageToggle />
-              {/* Theme toggle removed */}
+              {/* Cart button - v2.0 */}
+              <a 
+                href="/cart" 
+                className="relative flex items-center space-x-2 bg-orange-500 hover:bg-orange-600 text-white px-3 py-2 rounded-full transition-colors duration-200 shadow-lg hover:shadow-xl ml-2"
+              >
+                <ShoppingCart className="w-4 h-4" />
+                <span className="hidden sm:inline text-sm font-medium">
+                  {getText('cart', currentLanguage)}
+                </span>
+                {cartState.items.length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                    {cartState.items.reduce((sum, item) => sum + item.quantity, 0)}
+                  </span>
+                )}
+              </a>
             </div>
           </div>
         </div>

@@ -128,7 +128,7 @@ export default function CategoryManager() {
         imageBackground: formData.dishPageImage,
         order: formData.sortOrder,
         status: formData.isActive,
-        restaurantId: 'han-tagam',
+        restaurantId: 1,
       };
 
       console.log('Submitting category data:', categoryData); // Log the category data being submitted
