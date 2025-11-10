@@ -64,6 +64,8 @@ export async function GET(request: Request) {
         customerPhone: order.phoneNumber,
         totalAmount: order.totalAmount,
         status: status,
+        notes: order.notes,
+        address: order.address,
         createdAt: order.createdAt.toISOString(),
         updatedAt: order.updatedAt.toISOString(),
   items: order.orderItems.map((item: any) => ({
@@ -101,6 +103,8 @@ export async function POST(request: Request) {
         phoneNumber,
         totalAmount,
         status: 'PENDING',
+        notes: notes || null,
+        address: address || null,
         orderItems: {
           create: items.map((item: any) => ({
             mealId: item.mealId,

@@ -59,6 +59,23 @@ const OrderModal: React.FC<OrderModalProps> = ({ order, language, activeTab, onC
             <div className="font-extrabold text-emerald-700 text-xl">{formatCurrency(order.totalAmount)}</div>
           </div>
         </div>
+        
+        {(order.notes || order.address) && (
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+            {order.address && (
+              <div className="mb-3">
+                <div className="mb-1 text-sm font-semibold text-blue-700">{language === 'ru' ? 'Адрес доставки' : 'Eltip berme salgysy'}:</div>
+                <div className="text-blue-800">{order.address}</div>
+              </div>
+            )}
+            {order.notes && (
+              <div>
+                <div className="mb-1 text-sm font-semibold text-blue-700">{language === 'ru' ? 'Комментарий' : 'Teswirnama'}:</div>
+                <div className="text-blue-800">{order.notes}</div>
+              </div>
+            )}
+          </div>
+        )}
         <div>
           <div className="mb-2 text-xs font-semibold uppercase text-gray-500 tracking-wider">{language === 'ru' ? 'Состав заказа' : 'Sargyt düzümi'}</div>
           <div className="bg-gray-50/80 rounded-xl p-4 border border-gray-100">

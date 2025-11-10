@@ -79,6 +79,8 @@ model Order {
   clientId    String?     @map("client_id")
   totalAmount Float       @default(0) @map("total_amount")
   status      OrderStatus @default(PENDING)
+  notes       String?     @map("notes")
+  address     String?     @map("address")
   createdAt   DateTime    @default(now()) @map("created_at")
   updatedAt   DateTime    @updatedAt @map("updated_at")
   orderItems  OrderItem[]
@@ -129,4 +131,15 @@ enum OrderStatus {
   READY
   DELIVERED
   CANCELLED
+}
+
+model AppSettings {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("app_settings")
 }

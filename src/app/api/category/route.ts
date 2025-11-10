@@ -59,7 +59,13 @@ export async function GET() {
     const categories = await prisma.category.findMany({
       orderBy: { order: 'asc' },
     });
-    return NextResponse.json(categories);
+    
+    // Добавляем кэширование на 60 секунд
+    return NextResponse.json(categories, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=30'
+      }
+    });
   } catch (error) {
     console.error('Ошибка получения категорий:', error);
     return NextResponse.json({ error: 'Ошибка получения категорий' }, { status: 500 });

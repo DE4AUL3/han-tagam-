@@ -41,6 +41,8 @@ export interface DatabaseOrder {
   clientId?: string | null;
   totalAmount: number;
   status: string;
+  notes?: string | null;
+  address?: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -151,6 +153,8 @@ export interface LocalizedOrder {
   clientId?: string | null;
   totalAmount: number;
   status: string;
+  notes?: string | null;
+  address?: string | null;
   createdAt: Date;
   updatedAt: Date;
   client?: DatabaseClient;

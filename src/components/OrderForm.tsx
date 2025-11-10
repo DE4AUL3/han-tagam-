@@ -162,7 +162,7 @@ export default function OrderForm({ isOpen, onClose, onSuccess }: OrderFormProps
             <div className={`flex justify-between font-semibold pt-2 border-t ${
               isDark ? 'border-gray-600' : 'border-gray-200'
             }`}>
-              <span className={isDark ? 'text-white' : 'text-gray-900'}>Итого:</span>
+              <span className={isDark ? 'text-white' : 'text-gray-900'}>{getText('total', currentLanguage)}:</span>
               <span className={isDark ? 'text-white' : 'text-gray-900'}>
                 {state.totalAmount + state.deliveryFee} ТМТ
               </span>
@@ -186,7 +186,9 @@ export default function OrderForm({ isOpen, onClose, onSuccess }: OrderFormProps
                 required
                 value={formData.phone}
                 onChange={(e) => handleInputChange('phone', e.target.value)}
-                className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                className={`w-full pl-10 pr-4 py-3 border rounded-xl focus:ring-2 ${
+                  isDark ? 'focus:ring-red-500' : 'focus:ring-yellow-500'
+                } focus:border-transparent transition-colors ${
                   isDark 
                     ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
                     : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
@@ -196,10 +198,35 @@ export default function OrderForm({ isOpen, onClose, onSuccess }: OrderFormProps
             </div>
           </div>
 
+          <div>
+            <label className={`block text-sm font-medium mb-2 ${
+              isDark ? 'text-gray-300' : 'text-gray-700'
+            }`}>
+              {getText('orderComments', currentLanguage)}
+            </label>
+            <textarea
+              value={formData.notes}
+              onChange={(e) => handleInputChange('notes', e.target.value)}
+              rows={3}
+              className={`w-full px-4 py-3 border rounded-xl focus:ring-2 ${
+                isDark ? 'focus:ring-red-500' : 'focus:ring-yellow-500'
+              } focus:border-transparent transition-colors resize-none ${
+                isDark 
+                  ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' 
+                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+              }`}
+              placeholder={getText('orderCommentsPlaceholder', currentLanguage)}
+            />
+          </div>
+
           <button
             type="submit"
             disabled={isSubmitting || !formData.phone.trim()}
-            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 disabled:from-gray-400 disabled:to-gray-500 text-white py-4 px-6 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl disabled:cursor-not-allowed"
+            className={`w-full text-white py-4 px-6 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl disabled:cursor-not-allowed disabled:from-gray-400 disabled:to-gray-500 ${
+              isDark 
+                ? 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800' 
+                : 'bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700'
+            }`}
           >
             {isSubmitting ? (
               <div className="flex items-center justify-center space-x-2">
@@ -207,7 +234,7 @@ export default function OrderForm({ isOpen, onClose, onSuccess }: OrderFormProps
                 <span>{getText('submittingOrder', currentLanguage)}...</span>
               </div>
             ) : (
-              getText('submitOrder', currentLanguage)
+              getText('confirmOrder', currentLanguage)
             )}
           </button>
         </form>

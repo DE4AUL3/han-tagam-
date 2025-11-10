@@ -35,6 +35,8 @@ export const translations = {
     phone: 'Телефон',
     deliveryAddress: 'Адрес доставки',
     comment: 'Комментарий к заказу',
+    orderComments: 'Комментарий к заказу',
+    orderCommentsPlaceholder: 'Укажите пожелания, адрес доставки или другие детали...',
     submitOrder: 'Подтвердить заказ',
     // Валюта и единицы
     currency: 'ТМТ',
@@ -113,6 +115,8 @@ export const translations = {
     phone: 'Telefon',
     deliveryAddress: 'Eltip berme salgysy',
     comment: 'Sargyt boýunça teswirnama',
+    orderComments: 'Sargyt boýunça teswirnama',
+    orderCommentsPlaceholder: 'Islegleriňizi, eltip berme salgysy ýa-da beýleki jikmelikleri görkeziň...',
     submitOrder: 'Sargyt tassyklamak',
     // Валюта и единицы
     currency: 'TMT',

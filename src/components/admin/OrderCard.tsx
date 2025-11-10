@@ -58,7 +58,7 @@ function getDishTitle(item: any, lang: 'ru' | 'tk' = 'ru') {
   return item.dishNameTk || item.raw?.meal?.nameTk || item.raw?.meal?.name || item.nameTk || '';
 }
 import React from 'react';
-import { Clock, User, Phone, MapPin, Package, ChevronRight } from 'lucide-react';
+import { Clock, User, Phone, MapPin, Package, ChevronRight, MessageSquare } from 'lucide-react';
 import CopyPhoneButton from './CopyPhoneButton';
 import { useLanguage } from '@/hooks/useLanguage';
 import { Order } from '@/types/common';
@@ -139,6 +139,16 @@ const OrderCard: React.FC<OrderCardProps> = ({
               <span className="text-sm text-gray-600 line-clamp-1">{order.customerAddress}</span>
             </div>
           )}
+            {/* Небольшой превью комментария, если есть */}
+            {order.notes && (
+              <div className="mt-3 sm:mt-0 sm:ml-4 flex items-start gap-2 w-full max-w-md">
+                <MessageSquare className="w-4 h-4 text-gray-400 mt-1" />
+                <div className="text-sm text-gray-600 line-clamp-2 bg-gray-50/60 rounded-md p-2 border border-gray-100">
+                  <span className="font-semibold text-gray-700 mr-1">{currentLanguage === 'ru' ? 'Комментарий:' : 'Teswirnama:'}</span>
+                  <span>{order.notes}</span>
+                </div>
+              </div>
+            )}
         </div>
 
         {/* Состав заказа */}

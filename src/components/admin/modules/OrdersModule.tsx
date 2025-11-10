@@ -144,7 +144,7 @@ export default function OrdersModule({
       const orders = await res.json();
       dispatch({ type: 'SET_ORDERS', payload: orders });
       // Считаем только активные заказы
-      const activeCount = orders.filter((o: any) => ['new', 'pending', 'preparing', 'ready', 'delivering'].includes(o.status)).length;
+      const activeCount = orders.filter((o: any) => ['new', 'pending', 'confirmed', 'preparing', 'ready', 'delivering'].includes(o.status)).length;
       console.log('orders:', orders);
       console.log('activeCount:', activeCount);
       setOrdersCount?.(activeCount);

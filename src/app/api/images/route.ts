@@ -4,6 +4,7 @@ import { writeFile, mkdir } from 'fs/promises';
 import { join, dirname } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { existsSync } from 'fs';
+import sharp from 'sharp';
 
 
 
@@ -19,7 +20,7 @@ async function notifySSEClients(event: { type: string; data?: any }) {
     console.error("Ошибка отправки SSE события:", error);
   }
 }
-// Загрузка файла на сервер
+// Загрузка файла на сервер с автоматической оптимизацией
 async function saveFile(file: File, category: string): Promise<{ 
   success: boolean; 
   filePath?: string; 
@@ -30,7 +31,7 @@ async function saveFile(file: File, category: string): Promise<{
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     
-    const extension = file.name.split('.').pop() || 'jpg';
+    const extension = file.name.split('.').pop()?.toLowerCase() || 'jpg';
     const filename = `${uuidv4()}.${extension}`;
     
     // Определяем категорию для сохранения
@@ -54,8 +55,29 @@ async function saveFile(file: File, category: string): Promise<{
       await mkdir(dir, { recursive: true });
     }
     
-    // Записываем файл
-    await writeFile(absolutePath, buffer);
+    // 🚀 АВТОМАТИЧЕСКАЯ ОПТИМИЗАЦИЯ через Sharp
+    try {
+      let optimizedBuffer: Buffer = buffer;
+      
+      // Оптимизируем изображение
+      if (['jpg', 'jpeg', 'png', 'webp'].includes(extension)) {
+        optimizedBuffer = await sharp(buffer)
+          .resize(1200, 1200, {
+            fit: 'inside',
+            withoutEnlargement: true
+          })
+          .jpeg({ quality: 75, progressive: true })
+          .toBuffer() as Buffer;
+        
+        console.log(`✓ Оптимизировано: ${file.name} | До: ${buffer.length} → После: ${optimizedBuffer.length} байт`);
+      }
+      
+      // Записываем оптимизированный файл
+      await writeFile(absolutePath, optimizedBuffer);
+    } catch (optimizeError) {
+      console.warn('Не удалось оптимизировать изображение, сохраняем оригинал:', optimizeError);
+      await writeFile(absolutePath, buffer);
+    }
     
     return {
       success: true,

@@ -81,7 +81,8 @@ export interface Order {
   id: string;
   customerName: string;
   customerPhone: string;
-  customerAddress?: string;
+  address?: string;
+  customerAddress?: string; // Алиас для обратной совместимости
   items: OrderItem[];
   subtotal: number;
   deliveryFee: number;
