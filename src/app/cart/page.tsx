@@ -30,7 +30,7 @@ export default function CartPage() {
   }
 
   // Используем gold-elegance тему
-  const theme = getAppThemeClasses('panda-dark');
+  const theme = getAppThemeClasses('gold-elegance');
 
   if (cartState.items.length === 0 && !showSuccessNotification) {
     return (

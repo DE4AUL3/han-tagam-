@@ -77,7 +77,14 @@ export const translations = {
     imageSaved: 'Изображение сохранено',
     imageDeleted: 'Изображение удалено',
     errorUploadingImage: 'Ошибка загрузки изображения',
-    selectImage: 'Выберите изображение'
+    selectImage: 'Выберите изображение',
+    // Dish details modal
+    description: 'Описание',
+    calories: 'Калории',
+    grams: 'грамм',
+    minutes: 'мин',
+    addedToCart: 'Добавлено в корзину!',
+    viewDetails: 'Подробнее'
   },
   tk: {
     selectRestaurant: 'Restoran saýlaň',
@@ -157,7 +164,14 @@ export const translations = {
     imageSaved: 'Surat ýatda saklandy',
     imageDeleted: 'Surat pozuldy',
     errorUploadingImage: 'Surat ýüklemekde ýalňyşlyk',
-    selectImage: 'Surat saýlaň'
+    selectImage: 'Surat saýlaň',
+    // Dish details modal
+    description: 'Düşündiriş',
+    calories: 'Kalorii',
+    grams: 'gram',
+    minutes: 'min',
+    addedToCart: 'Sebet goşuldy!',
+    viewDetails: 'Jikme-jik'
   }
 } as const
 
