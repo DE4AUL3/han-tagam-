@@ -85,7 +85,6 @@ export interface Order {
   customerAddress?: string; // Алиас для обратной совместимости
   items: OrderItem[];
   subtotal: number;
-  deliveryFee: number;
   totalAmount: number;
   status: 'pending' | 'new' | 'confirmed' | 'preparing' | 'ready' | 'delivering' | 'delivered' | 'completed' | 'cancelled';
   notes?: string;

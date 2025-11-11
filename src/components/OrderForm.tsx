@@ -69,7 +69,7 @@ export default function OrderForm({ isOpen, onClose, onSuccess }: OrderFormProps
           })),
           address: formData.address,
           notes: formData.notes,
-          totalAmount: state.totalAmount + state.deliveryFee
+          totalAmount: state.totalAmount
         })
       });
 
@@ -164,7 +164,7 @@ export default function OrderForm({ isOpen, onClose, onSuccess }: OrderFormProps
             }`}>
               <span className={isDark ? 'text-white' : 'text-gray-900'}>{getText('total', currentLanguage)}:</span>
               <span className={isDark ? 'text-white' : 'text-gray-900'}>
-                {state.totalAmount + state.deliveryFee} ТМТ
+                {state.totalAmount} ТМТ
               </span>
             </div>
           </div>

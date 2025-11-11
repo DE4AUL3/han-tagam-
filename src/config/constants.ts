@@ -19,7 +19,6 @@ export const APP_CONFIG = {
   CURRENCY: 'ТМТ',
   
   // Корзина
-  DELIVERY_FEE: 25,
   MIN_ORDER_AMOUNT: 20,
   
   // UI настройки

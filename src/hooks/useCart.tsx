@@ -3,13 +3,10 @@
 import { createContext, useContext, useReducer, ReactNode, useEffect } from 'react'
 import { CartItem } from '@/types/menu'
 import { saveToStorage, loadFromStorage } from '@/lib/utils'
-import { APP_CONFIG } from '@/config/constants'
-import { useDelivery } from '@/hooks/useDelivery'
 
 interface CartState {
   items: CartItem[]
   totalAmount: number
-  deliveryFee: number
   isLoading: boolean
 }
 
@@ -19,7 +16,6 @@ type CartAction =
   | { type: 'REMOVE_ITEM'; payload: { id: string } }
   | { type: 'CLEAR_CART' }
   | { type: 'SET_LOADING'; payload: boolean }
-  | { type: 'SET_DELIVERY_FEE'; payload: number }
   | { type: 'HYDRATE_CART'; payload: CartItem[] }
 
 const CartContext = createContext<{
@@ -99,7 +95,6 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
       return {
         items: [],
         totalAmount: 0,
-        deliveryFee: APP_CONFIG.DELIVERY_FEE,
         isLoading: false
       }
     
@@ -107,12 +102,6 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
       return {
         ...state,
         isLoading: action.payload
-      }
-
-    case 'SET_DELIVERY_FEE':
-      return {
-        ...state,
-        deliveryFee: action.payload
       }
     
     case 'HYDRATE_CART': {
@@ -134,11 +123,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(cartReducer, {
     items: [],
     totalAmount: 0,
-    deliveryFee: APP_CONFIG.DELIVERY_FEE,
     isLoading: true
   })
-
-  const { calculateDelivery } = useDelivery()
 
   // Гидратация из localStorage при инициализации
   useEffect(() => {
@@ -153,18 +139,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [state.items, state.isLoading])
 
-  // Обновление стоимости доставки при изменении корзины
-  useEffect(() => {
-    if (!state.isLoading && calculateDelivery) {
-      calculateDelivery(state.totalAmount).then(deliveryInfo => {
-        if (deliveryInfo) {
-          dispatch({ type: "SET_DELIVERY_FEE", payload: deliveryInfo.deliveryFee });
-        }
-      }).catch(error => {
-        console.error("Ошибка расчета доставки:", error);
-      });
-    }
-  }, [state.totalAmount, state.isLoading, calculateDelivery])
+
 
   // Удобные методы
   const addItem = (item: CartItem) => {
@@ -188,7 +163,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }
 
   const getGrandTotal = () => {
-    return state.totalAmount + state.deliveryFee
+    return state.totalAmount
   }
 
   return (

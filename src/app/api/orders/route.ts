@@ -79,8 +79,7 @@ export async function GET(request: Request) {
           amount: item.amount, // Для совместимости с разными частями кода
           total: item.price * item.amount
         })),
-  subtotal: order.orderItems.reduce((sum: number, item: any) => sum + item.price * item.amount, 0),
-        deliveryFee: 0 // Пока нет поля доставки, можно добавить позже
+        subtotal: order.orderItems.reduce((sum: number, item: any) => sum + item.price * item.amount, 0)
       };
     });
 
