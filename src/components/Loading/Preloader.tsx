@@ -90,7 +90,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
           >
             {isDark ? (
               <Image 
-                src="/images/panda_logo.jpg" 
+                src="/images/han_logo.jpg" 
                 alt="Panda Burger" 
                 fill 
                 className="object-cover"

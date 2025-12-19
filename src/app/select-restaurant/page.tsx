@@ -11,7 +11,7 @@ export default function SelectRestaurantPage() {
       nameRu: 'Хан Тагам',
       description: 'Элегантная восточная кухня',
       url: 'https://hantagam.com/menu',
-      logo: '/images/han-tagam-logo.png',
+      logo: '/han_tagam_optimized.webp',
       bgColor: 'bg-white',
       accentColor: 'bg-[#d4af37]',
       textColor: 'text-gray-900',
@@ -24,7 +24,7 @@ export default function SelectRestaurantPage() {
       nameRu: 'Панда Бургер',
       description: 'Сочные бургеры премиум класса',
       url: 'https://pandaburger.cloud/menu',
-      logo: '/panda_logo.jpg',
+      logo: '/panda_logo_optimized.webp',
       bgColor: 'bg-[#212121]',
       accentColor: 'bg-red-600',
       textColor: 'text-white',
@@ -67,7 +67,7 @@ export default function SelectRestaurantPage() {
               className="group cursor-pointer"
             >
               <div className={`${restaurant.bgColor} rounded-2xl overflow-hidden border-2 ${restaurant.borderColor} shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] ${restaurant.id === 'han-tagam' ? 'hover:shadow-yellow-500/30' : 'hover:shadow-red-600/30'}`}>
-                {/* Логотип */}
+                {/* Логотип с оптимизацией */}
                 <div className="relative h-40 flex items-center justify-center p-6">
                   <Image
                     src={restaurant.logo}
@@ -75,7 +75,9 @@ export default function SelectRestaurantPage() {
                     width={160}
                     height={160}
                     className="object-contain max-h-32 group-hover:scale-110 transition-transform duration-300"
-                    unoptimized
+                    priority={index === 0}
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    quality={90}
                   />
                 </div>
 

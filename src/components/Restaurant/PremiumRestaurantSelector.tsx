@@ -59,7 +59,7 @@ const defaultRestaurants: Restaurant[] = [
     rating: 4.8,
     phone: '+993 (12) 123-45-67',
     address: 'г. Ашхабад, ул. Нейтральности, 15',
-    image: '/panda_logo.jpg',
+    image: '/han_logo.jpg',
     gradient: 'from-red-500 via-orange-500 to-red-700',
     features: ['Быстрая доставка', 'WiFi', 'QR заказ', 'Премиум качество'],
     isOpen: true,

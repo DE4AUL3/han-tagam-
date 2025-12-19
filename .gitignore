@@ -45,3 +45,8 @@ next-env.d.ts
 /src/generated/prisma
 
 /src/generated/prisma
+
+# Environment variables
+.env.local
+.env*.local
+*.old.tsx

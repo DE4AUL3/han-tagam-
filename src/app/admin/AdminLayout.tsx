@@ -1,8 +1,10 @@
+'use client';
+
 interface AdminLayoutProps {
   children: React.ReactNode;
   activeSection?: string;
 }
-'use client';
+
 
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useRouter } from 'next/navigation';

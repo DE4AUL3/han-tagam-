@@ -9,26 +9,44 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    // Проверяем, авторизован ли уже пользователь
-    const isAdmin = localStorage.getItem('isAdmin');
-    if (isAdmin === 'true') {
-      router.push('/admin/dashboard');
-    }
+    // Проверяем JWT токен через API
+    fetch('/api/auth/verify')
+      .then(res => res.json())
+      .then(data => {
+        if (data.authenticated) {
+          router.push('/admin/dashboard');
+        }
+      })
+      .catch(() => {});
   }, [router]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
-    // Простая проверка на клиенте (в реальном проекте должна быть серверная аутентификация)
-    if (username === 'hantagam_admin' && password === 'betchorba25') {
-      localStorage.setItem('isAdmin', 'true');
-      router.push('/admin/dashboard');
-    } else {
-      setError('Неверный логин или пароль. Проверьте данные и попробуйте снова.');
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        router.push('/admin/dashboard');
+      } else {
+        setError(data.error || 'Неверный логин или пароль');
+      }
+    } catch (err) {
+      setError('Ошибка подключения к серверу');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -45,7 +63,7 @@ export default function AdminLogin() {
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
-                    <div>
+          <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Логин
             </label>
@@ -53,7 +71,8 @@ export default function AdminLogin() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-[#333] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200"
+              disabled={loading}
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-[#333] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200 disabled:opacity-50"
               placeholder="Введите логин"
               required
             />
@@ -68,14 +87,16 @@ export default function AdminLogin() {
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-[#212121] text-gray-900 dark:text-white"
+                disabled={loading}
+                className="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-[#212121] text-gray-900 dark:text-white disabled:opacity-50"
                 placeholder="Пароль"
                 required
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                disabled={loading}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 disabled:opacity-50"
               >
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
@@ -95,9 +116,10 @@ export default function AdminLogin() {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition-colors"
+            disabled={loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Войти
+            {loading ? 'Вход...' : 'Войти'}
           </button>
         </form>
       </div>
